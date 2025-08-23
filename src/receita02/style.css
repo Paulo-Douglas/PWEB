@@ -1,0 +1,27 @@
+p.verso{
+    color: blue;
+}
+
+p.mote{
+    color: red;
+}
+
+a.meu-link{
+    color: blue;
+    text-decoration: none;
+}
+
+a.meu-link:hover{
+    color: red;
+    text-decoration: underline;
+}
+
+a.meu-link:visited{
+    color: blueviolet;
+    text-decoration: none;
+}
+
+a.meu-link:active{
+    color: orange;
+    text-decoration: none;
+}
