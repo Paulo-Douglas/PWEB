@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+
+  <body>
+    <div>
+      <!-- Link no lugar do botão -->
+      <a href="#" id="linkCarregar">Carregar sorvetes...</a>
+    </div>
+
+    <div id="lista"></div>
+  </body>
+
+  <script>
+    let sorvetes = ["Chocolate", "Morango", "Baunilha", "Pistache"];
+
+    // Função com parâmetro (arrow function)
+    const carregarDiv = (cervs) => {
+      const div = document.getElementById("lista");
+      const sorvetesHtml = cervs.map((item) => `<h1>${item}</h1>`);
+      div.innerHTML = sorvetesHtml.join("\n");
+    };
+
+    // Pegando o link
+    const link = document.getElementById("linkCarregar");
+
+    // Evento de clique com arrow function
+    link.addEventListener("click", (event) => {
+      event.preventDefault(); // impede recarregar a página
+      carregarDiv(sorvetes);
+    });
+  </script>
+</html>
