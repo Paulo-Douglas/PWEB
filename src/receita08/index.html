@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Pokémons com Imagem (Promises)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body class="bg-gray-100 text-gray-900 font-sans p-6">
+    <a href="#" id="linkCarregar" class="inline-block mb-4 px-4 py-2 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700 transition">
+      Carregar Pokémons
+    </a>
+
+    <div id="tabelaDiv" class="overflow-x-auto"></div>
+
+    <script type="module">
+      import { montarTabela } from "./tabela.js";
+
+      const carregarPokemonsComImagem = () => {
+        fetch("https://pokeapi.co/api/v2/pokemon?limit=10")
+          .then(res => res.json())
+          .then(data => {
+            const detalhesPromises = data.results.map((p, index) => {
+              return fetch(p.url)
+                .then(res => res.json())
+                .then(detalhe => ({
+                  id: index + 1,
+                  Nome: p.name,
+                  Imagem: `<img src="${detalhe.sprites.front_default}" alt="${p.name}" class="w-12 h-12">`,
+                  Tipo: detalhe.types.map(t => t.type.name).join(", ")
+                }));
+            });
+            return Promise.all(detalhesPromises);
+          })
+          .then(pokemons => {
+            montarTabela(pokemons, "tabelaDiv", ["id", "Nome", "Imagem", "Tipo"]);
+          })
+          .catch(err => {
+            document.getElementById("tabelaDiv").innerHTML = "<div>Erro ao carregar Pokémons</div>";
+            console.error(err);
+          });
+      };
+
+      document.getElementById("linkCarregar").addEventListener("click", e => {
+        e.preventDefault();
+        carregarPokemonsComImagem();
+      });
+    </script>
+  </body>
+</html>
