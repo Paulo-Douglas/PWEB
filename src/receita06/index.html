@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Tabela de Cervejas</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body class="bg-gray-100 text-gray-900 font-sans p-6">
+    <a
+      href="#"
+      id="linkCarregar"
+      class="inline-block mb-4 px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition"
+    >
+      Carregar cervejas...
+    </a>
+
+    <div id="cervejasDiv" class="overflow-x-auto"></div>
+
+    <script>
+      let cervejas = [
+        { name: "Guiness", alcohol: "10%", style: "Imperial Stout", ibu: "60" },
+        { name: "Desperados", alcohol: "6%", style: "Lager", ibu: "18" },
+        { name: "Becks", alcohol: "5%", style: "Pilsen", ibu: "20" }
+      ];
+
+      // carregarDiv genérica (arrow function)
+      const carregarDiv = (
+        cs,
+        targetId = "cervejasDiv",
+        headers = ["Nome", "Álcool", "Estilo", "Amargor"],
+        props = ["name", "alcohol", "style", "ibu"]
+      ) => {
+        const container = document.getElementById(targetId);
+        if (!container) return;
+
+        const thead = `
+          <thead class="bg-gray-200">
+            <tr>
+              ${headers
+                .map(
+                  (h) =>
+                    `<th class="px-4 py-2 text-left font-semibold">${h}</th>`
+                )
+                .join("")}
+            </tr>
+          </thead>`;
+
+        const tbodyRows = cs
+          .map((item, i) => {
+            const cells = props
+              .map((p) => {
+                let val = item?.[p] ?? "";
+                return `<td class="px-4 py-2">${val}</td>`;
+              })
+              .join("");
+            return `<tr class="${
+              i % 2 === 0 ? "bg-white" : "bg-gray-50"
+            } hover:bg-blue-50">${cells}</tr>`;
+          })
+          .join("\n");
+
+        const tableHtml = `
+          <table class="min-w-full border border-gray-300 rounded-lg shadow-sm">
+            ${thead}
+            <tbody>${tbodyRows}</tbody>
+          </table>`;
+
+        container.innerHTML = tableHtml;
+      };
+
+      // link que chama a função
+      document
+        .getElementById("linkCarregar")
+        .addEventListener("click", (event) => {
+          event.preventDefault();
+          carregarDiv(cervejas);
+        });
+    </script>
+  </body>
+</html>
